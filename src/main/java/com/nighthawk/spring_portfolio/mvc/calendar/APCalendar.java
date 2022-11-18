@@ -1,71 +1,83 @@
 package com.nighthawk.spring_portfolio.mvc.calendar;
-
 // Prototype Implementation
-
+import java.util.*;
+import java.time.*;
 public class APCalendar {
-
-    /** Returns true if year is a leap year and false otherwise.
-     * isLeapYear(2019) returns False
-     * isLeapYear(2016) returns True
-     */          
     public static boolean isLeapYear(int year) {
-        // implementation not shown
-
-        return false;
+        if((year % 4) == 0){
+            return true;
+        }else{
+            return false;
         }
-        
-    /** Returns the value representing the day of the week 
-     * 0 denotes Sunday, 
-     * 1 denotes Monday, ..., 
-     * 6 denotes Saturday. 
-     * firstDayOfYear(2019) returns 2 for Tuesday.
-    */
-    private static int firstDayOfYear(int year) {
-        // implementation not shown
-
-        return 0;
-        }
-
-
-    /** Returns n, where month, day, and year specify the nth day of the year.
-     * This method accounts for whether year is a leap year. 
-     * dayOfYear(1, 1, 2019) return 1
-     * dayOfYear(3, 1, 2017) returns 60, since 2017 is not a leap year
-     * dayOfYear(3, 1, 2016) returns 61, since 2016 is a leap year. 
-    */ 
-    private static int dayOfYear(int month, int day, int year) {
-        // implementation not shown
-
-        return 1;
-        }
-
+    }
+    public static int firstDayOfYear(int year) {
+        Calendar calenobj = Calendar.getInstance();
+        calenobj.add(Calendar.YEAR, year);
+        calenobj.add(Calendar.MONTH, 0); //month begins on index 0
+        calenobj.add(Calendar.DAY_OF_WEEK, 1);
+        //Dictionary/hashmap for the first three letters to numbers
+        Map<String, Integer> map = new HashMap<String, Integer>(){{
+            put("Sun",0);
+            put("Mon",1);
+            put("Tue",2);
+            put("Wed",3);
+            put("Thu",4);
+            put("Fri",5);
+            put("Sat",6);
+        }};
+        String day = (calenobj.getTime()).toString();
+        String days = day.substring(0,3);
+        return (map.get(days));
+    }
+    public static int dayOfYear(int month, int day, int year) {
+        //create new imported Java object that uses the calendar
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(new Date(year,month-1,day)); //month begins on index 0
+        //this method does not require an if statement using isLeapYear
+        return(cal.get(Calendar.DAY_OF_YEAR));
+    }
     /** Returns the number of leap years between year1 and year2, inclusive.
      * Precondition: 0 <= year1 <= year2
-    */ 
+    */
     public static int numberOfLeapYears(int year1, int year2) {
-         // to be implemented in part (a)
-
-        return 0;
+        int counter = 0;
+        for(int i = year1; i <= year2; i++){
+            if(isLeapYear(i)){
+                counter++;
+            }
         }
-
+        return counter;
+    }
     /** Returns the value representing the day of the week for the given date
      * Precondition: The date represented by month, day, year is a valid date.
     */
-    public static int dayOfWeek(int month, int day, int year) { 
-        // to be implemented in part (b)
-        return 0;
-        }
-
+    public static int dayOfWeek(int month, int day, int year) {
+        Calendar calenobj = Calendar.getInstance();
+        calenobj.add(Calendar.YEAR, year);
+        calenobj.add(Calendar.MONTH, month - 1); //month begins on index 0
+        calenobj.add(Calendar.DAY_OF_WEEK, day);
+        Map<String, Integer> map = new HashMap<String, Integer>(){{
+            put("Sun",1);
+            put("Mon",2);
+            put("Tue",3);
+            put("Wed",4);
+            put("Thu",5);
+            put("Fri",6);
+            put("Sat",0);
+        }};
+        String currentDay = (calenobj.getTime()).toString();
+        String days = currentDay.substring(0,3);
+        System.out.println(days);
+        return (map.get(days));
+    }
     /** Tester method */
     public static void main(String[] args) {
         // Private access modifiers
         System.out.println("firstDayOfYear: " + APCalendar.firstDayOfYear(2022));
         System.out.println("dayOfYear: " + APCalendar.dayOfYear(1, 1, 2022));
-
         // Public access modifiers
         System.out.println("isLeapYear: " + APCalendar.isLeapYear(2022));
         System.out.println("numberOfLeapYears: " + APCalendar.numberOfLeapYears(2000, 2022));
         System.out.println("dayOfWeek: " + APCalendar.dayOfWeek(1, 1, 2022));
     }
-
 }
